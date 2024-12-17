@@ -1,5 +1,8 @@
 <script setup>
 import { reactive, computed } from 'vue';
+import CalculatorHeader from './components/CalculatorHeader.vue';
+import CalculatorInputs from './components/CalculatorInputs.vue';
+import CalculatorResult from './components/CalculatorResult.vue';
 
 const state = reactive({
   num1: null,
@@ -27,45 +30,26 @@ const result = computed(() => {
       return 'Operação inválida!';
   }
 });
+
+const updateValues = (values) => {
+  state.num1 = values.num1;
+  state.num2 = values.num2;
+  state.operation = values.operation;
+};
 </script>
 
 <template>
   <div class="calculator container py-5">
     <div class="card shadow-lg">
-      <div class="card-header text-center bg-primary text-white">
-        <h2>Calculadora Aritmética</h2>
-      </div>
+      <CalculatorHeader />
       <div class="card-body">
-        <div class="row g-3 align-items-center justify-content-center">
-          <div class="col-12 col-md-3">
-            <input
-              v-model.number="state.num1"
-              type="number"
-              class="form-control"
-              placeholder="Digite o 1º número"
-            />
-          </div>
-          <div class="col-12 col-md-2">
-            <select v-model="state.operation" class="form-select">
-              <option value="add">+</option>
-              <option value="subtract">-</option>
-              <option value="multiply">×</option>
-              <option value="divide">÷</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-3">
-            <input
-              v-model.number="state.num2"
-              type="number"
-              class="form-control"
-              placeholder="Digite o 2º número"
-            />
-          </div>
-        </div>
-        <div class="mt-4 text-center">
-          <h3 class="text-primary">Resultado:</h3>
-          <p class="fs-4 fw-bold text-warning">{{ result }}</p>
-        </div>
+        <CalculatorInputs
+          :num1="state.num1"
+          :num2="state.num2"
+          :operation="state.operation"
+          @updateValues="updateValues"
+        />
+        <CalculatorResult :result="result" />
       </div>
     </div>
   </div>
@@ -91,5 +75,11 @@ const result = computed(() => {
 
 h3 {
   margin-bottom: 10px;
+}
+
+.result p {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #ffca28;
 }
 </style>
